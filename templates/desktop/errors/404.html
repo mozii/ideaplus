@@ -1,0 +1,23 @@
+{% extends "../base.html" %}
+{% block title %}找不到这个页面{% end %}
+
+
+{% block right %}
+{% end %}
+
+{% block content %}
+        <div class="box">
+            <div class="cell">
+                <span class="fade">
+                    <a href="{{ reverse_url('main') }}">{{ handler.settings.site_name }}</a> <span class="chevron">&nbsp;›&nbsp;</span> 找不到这个页面
+                </span>
+            </div> 
+                <div class="inner">
+                    <div style="text-align:center;">
+                        <p>找不到这个页面</p>
+                        <img src="{{ static_url('img/404.jpg') }}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% end %}

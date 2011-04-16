@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd"
+    >
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ handler.settings.site_name }} › {% block title %}{% end %}</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ static_url('css/style.css') }}" />
+    <link href="{{ static_url('img/favicon.ico') }}" rel="icon" type="image/x-icon" />
+    <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/AAAA6klEQVQ4y42RMQ6CMBiFXw2XoKMaXV1KnNnUwdXdMxjwBGC8iBeQTWeDi5MJRhh10yPUxSKtP4WXNGle8n392zIQEUEkqf68WTOzcygwjUOKhwfIOhFEEMm2+ZuwCh/ERB7ERAOoTkmYCCKpRj56U03sp0nZub0unnkBP00AAMUbWGxidGBJFa6LJlB2M8+8+DudFFASl3O4nJOw9QfUw13ny7LLX79l/YmqpBVsk5hgLUxJqlAjSEms437jmMXlcZIA4IUxdkGodWZGfMwYBQPA7Z5hu38AAFYzroGD/rDck4LbPWu8ppJ8AM37PDEGiFG7AAAAAElFTkSuQmCC" rel="icon" type="image/x-icon" />
+    {% block css %}{% end %}
+    <link  href="http://fonts.googleapis.com/css?family=Philosopher:regular" rel="stylesheet" type="text/css" >
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js" type="text/javascript"></script>-->
+    <script src="{{ static_url('js/jquery-1.5.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('js/jquery.notifyBar.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('js/ajax.js') }}" type="text/javascript"></script>
+    {% block js %}{% end %}
+    <!--[if lt IE 9]>
+    <!-- 去死把, IE users --!>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <header>
+        <a href="#;" name="_top"></a> 
+        <nav> 
+            <a href="{{ reverse_url('main') }}" id="logo">{{ handler.settings.site_name }}<a/>
+            <div id="navigation"> 
+                <ul>
+                    <li><a href="{{ reverse_url('main') }}" class="white">首页</a></li> 
+                    {% if current_user %}
+                    <li><a href="{{ reverse_url('member', current_user['account']) }}" class="white">{{ escape(current_user['account']) }}</a></li>
+                    <li><a href="{{ reverse_url('fg') }}" class="white">富光</a></li>
+                    <li><a href="{{ reverse_url('setting') }}" class="white">设置</a></li>
+                    <li><a href="{{ reverse_url('signout') }}" class="white">退出</a></li> 
+                    {% else %}
+                    <li><a href="{{ reverse_url('signin') }}" class="white">登录</a></li>
+                    {% end %}
+                </ul>
+            </div>
+            <div id="search">
+                <form>
+                    <input type="text" class="search" maxlength="40" name="q" value="" id="q" />
+                    <input type="submit" class="super normal button" value="找找" style="-moz-border-radius: 0px 5px 5px 0px; border: none;" />
+                </form>
+            </div> 
+        </nav> 
+    </header>
+    
+    <section id="wrapper">
+	<section id="main">
+	    <aside>
+                {% if not current_user %}
+                {% include "right/right_login.html" %}
+                {% else %}
+                {% include "right/right_user.html" %}
+                {% end %}
+                {% block right %}{% end %}
+	    </aside>
+	    <section id="content">
+		{% block content %}{% end %}
+	    </section>
+	</section>
+    </section>
+    
+    <footer>
+        <div id="bottom">
+            <div class="fr" align="right" style="padding-top: 10px;">
+                <a href="http://www.python.org/" target="_blank">python</a> | 
+                <a href="http://twistedmatrix.com/trac/" target="_blank">twisted</a> |
+                <a href="https://github.com/fiorix" target="_blank">fiorix</a>
+            </div>
+            
+            <strong><a href="#" class="dark">富光壹品</a></strong>&nbsp; | &nbsp;
+            <strong><a href="http://www.fuguangchina.com" target="blank" class="dark">富光</a></strong>&nbsp; | &nbsp;
+            <strong><a href="#" class="dark">FAQ和帮助</a></strong>&nbsp; | &nbsp;
+            <strong><a href="#" class="dark">关于</a></strong>
+            <div class="sep5"></div>
+            <span class="fade">From <a href="http://www.pinpin.us/" target="_blank" class="dark"><strong>d_yang</strong></a></span> • 
+            <span class="fade">Css based on <a href="http://www.v2ex.com/" target="_blank" class="dark"><strong>v2ex</strong></a></span> • 
+            {% if current_user %}
+            <span class="fade" style="font-size:10px;">
+                最后登于 {{ current_user.get('last_login', '现在') }}
+                自 {{ current_user.get('last_login_ip', '127.0.0.1') }}
+                {%if current_user.get('last_login_ip', '127.0.0.1') != '127.0.0.1' %}
+                ({{ handler.settings.geoip.getIpAddr(current_user['last_login_ip']) }})
+                {% end %}
+             </span>
+            {% end %}
+        </div>
+    </footer>
+    
+</body>
+</html>

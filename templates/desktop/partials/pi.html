@@ -1,0 +1,12 @@
+<a href="{{ reverse_url('follow', current_user['account']) }}?ft=fi" class="dark">
+    <span class="bigger">{{ int(pi.get('following_count', 0)) }}</span>
+    <span class="fade">关注</span>
+</a><span class="snow"> • </span>
+<a href="{{ reverse_url('follow', current_user['account']) }}?ft=fd" class="dark">
+    <span class="bigger">{{ int(pi.get('followed_count', 0)) }}</span>
+    <span class="fade">粉丝</span>
+</a><span class="snow"> • </span>
+<a href="{{ reverse_url('like') }}" class="dark">
+    <span class="bigger">{{ int(pi.get('fav_count', 0)) }}</span>
+    <span class="fade">收藏</span>
+</a>

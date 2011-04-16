@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ current_user['account'] }}的收藏{% end %}
+
+{% block right %}
+{% end %}
+
+
+{% block content %}
+    
+    <div class="box">
+        <div class="cell">
+            <div class="fr" align="right">
+                <span class="fade">
+                    <strong>{{ int(like_count) }}</strong>
+                </span>
+                <span class="snow">个收藏</span>
+            </div>
+            <span class="bigger"><a href="{{ reverse_url('main') }}">{{ handler.settings.site_name }}</a> <span class="chevron"> › </span> {{ current_user['account'] }}的收藏</span>
+            <div class="sep10"></div>
+            
+            {% if not likes %}
+            <div class="cell"> 
+                还没有收藏
+            </div>
+            {% else %}
+            
+            {% for like in likes%}
+            {{ modules.Like(like) }}
+            {% end %}
+            
+            <div class="inner" align="center">
+                {{ page.pager(handler.settings.pager) }}
+            </div>
+            {% end %}
+            
+        </div>
+    </div>
+    
+{% end %}

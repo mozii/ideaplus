@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ account }}的{% if following %}关注{% else %}粉丝{% end %}{% end %}
+
+{% block right %}
+{% end %}
+
+
+{% block content %}
+    
+    <div class="box">
+        <div class="cell" style="min-height:300px;">
+            <div class="fr" align="right">
+                <span class="fade">
+                    <strong>{{ int(count) }}</strong>
+                </span>
+                <span class="snow">个{% if following %}关注{% else %}粉丝{% end %}</span>
+            </div>
+            <span class="bigger">
+                <a href="{{ reverse_url('main') }}">{{ handler.settings.site_name }}</a>
+                <span class="chevron"> › </span>
+                {{ account }}的{% if following %}关注{% else %}粉丝{% end %}
+            </span>
+            <div class="sep10"></div>
+            
+            {% if not user_list %}
+            <div class="cell"> 
+                还没有人.
+            </div>
+            {% else %}
+            <ul class="avatar">
+		{% for u in user_list%}
+		<li>
+		    <a href="{{ reverse_url('member', u['followee']) }}" class="tipsy-avatar" title="{{ u['followee'] }}">
+			<img src="{{ modules.Avatar(u['followee-email'], 48, 'jpg') }}" style="width:48px;height:48px;" />
+		    </a>
+		</li>
+		{% end %}
+	    </ul>
+            
+            <div class="inner" align="center">
+                {{ page.pager(handler.settings.pager) }}
+            </div>
+            {% end %}
+            
+        </div>
+    </div>
+    
+{% end %}

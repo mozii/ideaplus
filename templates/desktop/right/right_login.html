@@ -1,0 +1,58 @@
+            <div class="box"> 
+                <div class="cell"> 
+                    <strong>{{ handler.settings.site_name }}</strong> 
+                    <div class="sep5"></div> 
+                    <span class="fade">自己的品位,与人无关</span> 
+                </div> 
+                <div class="inner">
+                    <form action="{{ reverse_url('signin') }}" method="post">
+                        {% if globals().get('error_msgs') %}
+                        <strong>请补充、修改您填写的内容</strong>
+                        <div class="sep10"></div>
+                        <ul>
+                            {% for error in error_msgs %}
+                            <li>{{ error }}</li>
+                            {% end %}
+                        </ul>
+                        {% end %}
+                        <table cellpadding="5" cellspacing="0" border="0">
+                            <tr>
+                                <td align="right">
+                                    用户名
+                                </td>
+                                <td align="left">
+                                    <input type="text" class="sl" name="u" style="width:160px;" value="{% if globals().get('account') %}{{ account }}{% end %}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    密码
+                                </td>
+                                <td align="left">
+                                    <input type="password" class="sl" name="p" style="width:160px;" value="" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                </td>
+                                <td align="left">
+                                    <input type="hidden" value="/" name="next"/>
+                                    <input type="submit" value="登录" class="super normal button" />
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="80" align="right">
+                                </td>
+                                <td width="200" align="left">
+                                    <span class="fade">
+                                        <a href="/forgot">忘记了密码?</a>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                        {{ xsrf_form_html() }}
+                    </form>
+                     
+                </div> 
+            </div>

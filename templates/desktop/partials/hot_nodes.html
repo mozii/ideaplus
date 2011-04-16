@@ -1,0 +1,3 @@
+{% for n in hot_nodes %}
+    <a href="{{ reverse_url('node', n['name']) }}" class="item_node">{{ n['title'] }} ({{ n.get('topic_count', 0) }})</a>
+{% end %}

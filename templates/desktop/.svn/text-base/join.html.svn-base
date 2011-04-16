@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}注册{% end %}
+
+
+{% block right %}
+
+{% end %}
+
+{% block content %}
+    <div class="box">
+    <div class="cell">
+        <span class="fade">
+            <a href="{{ reverse_url('main') }}">{{ handler.settings.site_name }}</a> <span class="chevron">&nbsp;›&nbsp;</span> 注册
+        </span>
+    </div> 
+        <div class="inner">
+            <form action="" method="post">
+                {% if globals().get('error_msgs') %}
+                <strong>请补充、修改您填写的内容</strong>
+                <div class="sep10"></div>
+                <ul>
+                    {% for error in error_msgs %}
+                    <li>{{ error }}</li>
+                    {% end %}
+                </ul>
+                {% end %}
+                <script type="text/javascript">
+                var RecaptchaOptions = {
+                   theme : 'clean',
+                   lang: 'en',
+                   custom_translations : {
+                            instructions_visual : "请输入验证码:",
+                            instructions_audio : "请仔细听:",
+                            play_again : "再播一次",
+                            cant_hear_this : "听不清楚",
+                            visual_challenge : "字符验证码",
+                            audio_challenge : "声音验证码",
+                            refresh_btn : "刷新",
+                            help_btn : "帮助",
+                            incorrect_try_again : "错误，请重试.",
+                    }
+                };
+                </script>
+                <table cellpadding="5" cellspacing="0" border="0">
+                    <tr>
+                        <td width="80" align="right">
+                            账户
+                        </td>
+                        <td width="200" align="left">
+                            <input type="text" class="sl" name="account" value="{% if globals().get('account') %}{{ account }}{% end %}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="80" align="right">
+                            密码
+                        </td>
+                        <td width="200" align="left">
+                            <input type="password" class="sl" name="password" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="80" align="right">
+                            电子邮件
+                        </td>
+                        <td width="200" align="left">
+                            <input type="text" class="sl" name="email" value="{% if globals().get('email') %}{{ email }}{% end %}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="80" align="right">
+                        </td>
+                        <td width="200" align="left">
+                            {{ captcha_html }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="80" align="right">
+                        </td>
+                        <td width="200" align="left">
+                            <input type="hidden" value="{{ next }}" name="next"/>
+                            <input type="submit" value="加入" class="super normal button" />
+                        </td>
+                    </tr>
+                </table>
+                {{ xsrf_form_html() }}
+            </form>
+        </div>
+    </div>
+    </div>
+{% end %}

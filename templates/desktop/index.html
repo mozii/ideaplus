@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}首页{% end %}
+
+{% block right %}
+    {{ modules.HotNode() }}
+    
+    {% if current_user %}
+    {{ modules.Follower() }}
+    {% include "right/right_invite.html" %}
+    {% end %}
+    
+    
+{% end %}
+
+{% block content %}
+            <div class="box"> 
+                <div class="cell" align="left">
+                    <div class="fr">
+                        <span class="fade" style="font-size: 110%;">
+			    时尚
+			    <span class="snow">&nbsp;•&nbsp;</span> 生活
+			    <span class="snow">&nbsp;•&nbsp;</span> 知性
+			    <span class="snow">&nbsp;•&nbsp;</span> 极客
+			</span>
+		    </div>
+                    <span class="bigger">欢迎来到 <strong>{{ handler.settings.site_name }}</strong> !</span>
+                    <div class="sep10"></div>
+                </div> 
+		{% if current_user %}
+                <div class="cell">
+                        <div class="fade">自言自语</div>
+                        <div class="sep3"></div>
+                        <form method="post" action="{{ reverse_url('topic_new', 'qa') }}">
+                                <textarea class="mll short" style="height:20px;" id="f-textarea" name="title"></textarea>
+                                <div class="sep3"></div>
+                                <div align="right" id="f-submit" style="display:none;">
+                                        <input type="submit" class="super normal button" value="发送" />
+                                </div>
+				{{ xsrf_form_html() }}
+                        </form>
+                </div>
+    		{% end %}
+
+		{% if len(topics)==0 %}
+                <div class="cell"> 
+                    还没有话题
+                </div>
+                {% else %}
+                {% for topic in topics%}
+                {{ modules.Topic(topic, True) }}
+                {% end %}
+                
+                <div class="inner" align="center">
+                        {{ page.pager(handler.settings.pager) }}
+                </div>
+                {% end %}
+            </div>
+            
+            <div class="sep20"></div>
+            
+            <div class="box">
+                <div class="cell">
+                    <span class="fade"><strong>{{ handler.settings.site_name }}</strong> / 导航</span>
+                </div>
+                {% for s in section_list %}
+                <div class="cell">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td align="right" width="80">
+                                <span class="fade">{{ s['section']['title'] }}</span>
+                            </td>
+                            <td style="line-height: 200%; padding-left: 15px;">
+                                {% for n in s['nodes'] %}
+                                <a href="{{ reverse_url('node', n['name']) }}" title="{{ n['desc'] }}" style="font-size: 14px;">{{ n['title'] }}</a>
+				<span class="fade">{{ n['topic_count'] }} 话题</span>&nbsp; &nbsp;
+                                {% end %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                {% end %}
+                
+            </div>
+            
+{% end %}
+

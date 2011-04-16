@@ -1,0 +1,13 @@
+    {% if followers %}
+	    <ul class="avatar">
+		{% for u in followers %}
+		<li>
+		    <a href="{{ reverse_url('member', u['followee']) }}" class="tipsy-avatar" title="{{ u['followee'] }}">
+			<img src="{{ modules.Avatar(u['followee-email'], 24, 'jpg') }}" style="width:24px;height:24px;" />
+		    </a>
+		</li>
+		{% end %}
+	    </ul>
+	    {% else %}
+	    还没有关注过任何人.
+	    {% end %}

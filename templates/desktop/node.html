@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}{{ node['title'] }}{% end %}
+
+
+{% block right %}
+    
+    <div class="sep20"></div> 
+    <div class="box"> 
+	<div class="cell">
+	    <span class="fade">收藏这个版块的用户</span> 
+	</div> 
+	<div class="inner" style="line-height: 200%;">
+	    {% if fav_users %}
+	    <ul class="avatar">
+		{% for u in fav_users %}
+		<li>
+		    <a href="{{ reverse_url('member', u['user_name']) }}" class="tipsy-avatar" title="{{ u['user_name'] }}">
+			<img src="{{ modules.Avatar(u['user_email'], 24, 'jpg') }}" style="width:24px;height:24px;" />
+		    </a>
+		</li>
+		{% end %}
+	    </ul>
+	    {% else %}
+	    还没有人收藏过.
+	    {% end %}
+	</div> 
+</div>
+    
+{% end %}
+
+{% block content %}
+            <div class="box">
+		<div class="cell" style="padding-bottom: 0px;">
+		    <table cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+			    <td width="60" align="center" valign="top">
+				    <img src={{ static_url('img/nodes/'+ node['icon'] ) }}/>
+			    </td>
+			    <td width="10">&nbsp;</td>
+			    <td width="auto" valign="top">
+				<div class="fr" align="right">
+				    <span class="fade">
+					<strong>{{ page.item_count }}</strong>
+				    </span>
+				    <span class="snow">个主题</span>
+				    <span class="snow"> • </span>
+				    <span class="fade">
+					<strong>{{ int(like_count) }}</strong>
+				    </span>
+				    <span class="snow">人收藏</span> 
+				    {% if current_user %}
+				    <form id="like_form" method="POST" action="{{ reverse_url('node_like', node['name']) }}">
+					    {{ xsrf_form_html() }}
+					    <a href="javascript:like_it()" id="like_op" class="op">{% if has_fav %}取消收藏{% else %}收藏{% end %}</a>
+				    </form>
+				    {% end %}
+				</div>
+				<span class="bigger"><a href="{{ reverse_url('main') }}">{{ handler.settings.site_name }}</a> <span class="chevron"> › </span> {{ node['title'] }}</span>
+				<div class="sep10"></div>
+				<span class="header">
+				    {{ node['desc'] }}
+				</span>
+				{% if current_user %}<div class="sep10"></div>
+				<div class="sep5"></div>
+				<a href="{{ reverse_url('topic_new', node['name']) }}" class="super normal button">创建新主题</a>{% end %}
+				<div class="sep10"></div>
+			    </td>
+			</tr>
+		    </table>
+		</div>
+                {% if not topics %}
+                <div class="cell"> 
+                    还没有话题
+                </div>
+                {% else %}
+                {% for topic in topics%}
+                {{ modules.Topic(topic) }}
+                {% end %}
+                
+                <div class="inner" align="center">
+                        {{ page.pager(handler.settings.pager) }}
+                </div>
+                {% end %}
+            </div>
+	    {% if current_user %}
+	    <div class="sep20"></div>
+	    
+	    <div class="box">
+		<div class="inner">
+		    <span class="fade">创建新话题</span>
+		    <form action="{{ reverse_url('topic_new', node['name']) }}" method="post">
+			<input type="text" name="title" class="sll"/>
+			<div class="sep10"></div>
+			<textarea name="content" class="mll"></textarea>
+			<div class="sep10"></div>
+			<input type="submit" value="创建" class="super normal button"/>
+		    {{ xsrf_form_html() }}
+		    </form>
+		</div>
+	    </div>
+	    {% end %}
+{% end %}

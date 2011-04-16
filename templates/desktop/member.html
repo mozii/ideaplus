@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}{{ member['account'] }}{% end %}
+
+{% block right %}
+
+{% end %}
+
+{% block content %}
+    <div class="box">
+        <div class="cell">
+            <table cellpadding="0" cellspacing="0" width="100%" border="0">
+                <tr>
+                    <td width="73" valign="top" align="center">
+                        <img src="{{ modules.Avatar(member['email'], 100, 'jpg') }}" />
+                    </td>
+                    <td width="10" valign="top"></td>
+                    <td width="auto" align="left" valign="top">
+                        {% if current_user and (member['account'] != current_user['account']) %}
+                        <div class="fr">
+                            <div class="sep3"></div>
+                            <form id="follow-form" action="{{ reverse_url('follow', member['account']) }}" method="post">
+                                {{ xsrf_form_html() }}
+                                <input type="submit" id="f-submit" value="{% if following %}取消关注{% else %}关注{% end %}" class="super normal button" />
+                            </form>
+                        </div>
+                        {% end %}
+                        <h2 style="padding: 0px; margin: 0px; font-size: 22px; line-height: 22px;">{{ member['account'] }}</h2>
+                        <div class="sep5"></div>
+                        <span class="fade bigger">{{ member.get('title', '没有头衔') }}</span>
+                        <div class="sep10"></div>
+                        <div class="fade">
+                            {{ handler.settings.site_name }}第 {{ member['num'] }} 位用户<br/>
+                            加入于 {{ modules.TimeSince(member['created']) }}<br/>
+                            最后登录于 {{ modules.TimeSince(member.get('last_login')) }}
+                        </div>
+                        <div class="sep10"></div>
+                        <table cellpadding="2" cellspacing="0" border="0" width="100%"> 
+                                <tr> 
+                                    <td width="50%"> 
+                                        <span style="line-height: 16px;"><img src="{{ static_url('img/dot_green.png') }}" align="absmiddle" /> &nbsp;
+                                        来自: <a href="http://www.google.com/maps?q={{ member.get('location', '火星') }}" target="_blank" rel="nofollow external">{{ member.get('location', '火星') }}</a>
+                                        </span> 
+                                    </td> 
+                                    <td width="50%">
+                                        <span style="line-height: 16px;">
+                                            <img src="{{ static_url('img/dot_red.png') }}" align="absmiddle" /> &nbsp;
+                                            关注 {{ int(pi.get('following_count', 0)) }},
+                                            粉丝 {{ int(pi.get('followed_count', 0)) }}
+                                        </span>
+                                    </td> 
+                                </tr>
+                                <tr>
+                                    <td width="50%"> 
+                                    <span style="line-height: 16px;"><img src="{{ static_url('img/dot_orange.png') }}" align="absmiddle" /> &nbsp;
+                                    <a href="{{ member.get('website', '无') }}" target="_blank" rel="nofollow external">{{ member.get('website', '没有设置') }}</a></span> 
+                                    
+                                    </td> 
+                                    <td width="50%"></td> 
+                                </tr> 
+                                
+                            </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        {% if member.has_key('bio') %}
+        <div class="inner">
+            {{ escape(member.get('bio', '没有个人介绍')) }}
+        </div>
+        {% end %}
+    </div>
+    <div class="sep20"></div>
+    
+    <div class="box"> 
+                <div class="cell"><span class="fade">最近创建主题</span></div> 
+                <div class="inner"> 
+                    <table cellpadding="5" cellspacing="0" border="0" width="100%" class="topics"> 
+                        <tr> 
+                            <th align="right" width="50">回复</td> 
+                            <th align="left" width="auto">标题</td>
+                            <th align="left" width="auto">最后回复</td> 
+                            <th align="left" width="200" colspan="2">最后回复时间</td> 
+                        </tr> 
+                        {% if topic_latest %}
+                        {% for topic in topic_latest %}
+                        <tr> 
+                            <td align="right" width="50" class="odd lend">共<strong><span class="green">{{ topic.get('replies_num', 0) }}</span></strong>楼</td> 
+                            <td align="left" width="auto" class="odd"><a href="{{ reverse_url('topic', topic['num']) }}">{{ topic['title'] }}</a></td> 
+                            <td align="left" width="80" class="odd">
+                                {% if topic.has_key('last_repled_name')%}
+                                <a href="{{ reverse_url('member', topic['last_repled_name']) }}" class="dark">{{ topic.get('last_repled_name', '没有回复') }}</a>
+                                {% else %}
+                                没有回复
+                                {% end %}
+                            </td> 
+                            <td align="left" width="110" class="odd rend"><small class="fade">{% if topic.has_key('last_repled_time') %}{{ modules.TimeSince(topic['last_repled_time']) }}{% else %}没有回复{% end %}</small></td> 
+                        </tr>
+                        {% end %}
+                        {% else %}
+                        <tr>
+                            <td colspan="4">还没有</rd>
+                        </tr>
+                        {% end %}
+                        
+                        
+                    </table> 
+                </div> 
+            </div> 
+            
+            <div class="sep20"></div> 
+            <div class="box"> 
+                <div class="cell"><span class="fade">最近参与主题</span></div> 
+                <div class="inner"> 
+                    <table cellpadding="5" cellspacing="0" border="0" width="100%" class="topics"> 
+                        <tr> 
+                            <th align="right" width="50">回复</td> 
+                            <th align="left" width="auto">标题</td>
+                            <th align="left" width="auto">创建人</td> 
+                            <th align="left" width="200" colspan="2">回复时间</td> 
+                        </tr> 
+                        {% if reply_latest %}
+                        {% for r in reply_latest %}
+                        <tr> 
+                            <td align="right" width="50" class="odd lend">第<strong><span class="green">{{ r['num'] }}</span></strong>楼</td> 
+                            <td align="left" width="auto" class="odd"><a href="{{ reverse_url('topic', r['topic_num']) }}">{{ r['topic_title'] }}</a></td>
+                            <td align="left" width="80" class="odd">
+                                <a href="{{ reverse_url('member', r['member_name']) }}">{{ r['member_name'] }}</a>
+                            </td>
+                            <td align="left" width="110" class="odd rend"><small class="fade">{{ modules.TimeSince(r['created']) }}</small></td> 
+                        </tr>
+                        {% end %}
+                        {% else %}
+                        <tr>
+                            <td colspan="4">还没有</rd>
+                        </tr>
+                        {% end %}
+                        
+                    </table> 
+                </div> 
+            </div>
+    
+{% end %}

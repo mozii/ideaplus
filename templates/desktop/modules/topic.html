@@ -1,0 +1,29 @@
+<div class="cell"> 
+	<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr> 
+		<td valign="top" class="avatar"><a href="{{ reverse_url('member', topic['member_name']) }}"><img src="{{ modules.Avatar(topic['member_email'], 48, 'jpg') }}" /></a></td> 
+		<td style="padding-left: 12px" valign="top"> 
+		        <div class="fr"> 
+		                {% if topic.has_key('replies_num') %}<a href="{{ reverse_url('topic', int(topic['num'])) }}#{{ topic['replies_num'] }}" class="count_livid">{{ topic['replies_num'] }}</a>{% end %} 
+		        </div> 
+			<div class="sep3"></div> 
+			<span class="bigger" style="font-size: 16px; line-height: 130%;"><a href="{{ reverse_url('topic', int(topic['num'])) }}">{{ escape(topic['title']) }}</a></span> 
+			<div class="sep5"></div> 
+			<span class="created">
+			{% if show_node %}
+			<strong>
+				<a href="{{ reverse_url('node', topic['node_name']) }}" class="node">{{ topic['node_title'] }}</a>
+			</strong>
+			{% end %}
+			<strong>
+				<a href="{{ reverse_url('member', topic['member_name']) }}" class="dark">
+					{{ escape(topic['member_name']) }}
+				</a>
+				创建于 {{ modules.TimeSince(topic['created']) }}
+			</strong>
+			&nbsp;•&nbsp; {{ topic['content_length'] }} 字符
+			&nbsp;•&nbsp; {{ topic.get('view_num', 0) }} 点击
+			</span>
+		</td> 
+		</tr> 
+	</table> 
+</div>

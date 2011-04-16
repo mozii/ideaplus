@@ -1,0 +1,23 @@
+<div class="cell reply">
+    <a name="p_{{ product['name'] }}"></a>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%"> 
+        <tr>
+            <td width="150" valign="top">
+                <div style="width:148px;height:180px;">
+                    <img src="{{ product['image'] }}" class="p_img" />
+                </div>
+            </td>
+            <td width="10"></td> 
+            <td width="auto" valign="top">
+                <div class="fr">
+                    {% if product.get('category') %}<a href="{{ reverse_url('fg') }}?category={{ product.get('category') }}" class="op"> {{ product.get('category') }}</a>{% end %}
+                    <a href="{{ reverse_url('product', product['number']) }}" class="op" target="_blank">产品详细</a>
+                    <a href="#" target="about" class="op discount">获得折扣</a>
+                </div>
+                <div class="sep3"></div>
+                <strong><a href="{{ reverse_url('product', product['number']) }}" class="dark" style="font-size:14px;" target="_blank">{{ product['name'] }}</a></strong>
+                <div class="sep5"></div>
+                <div class="content" style="font-size:12px;color:#333;">{{ modules.Escape(product['desc'].replace('|', '')) }}</div>
+            </td>
+    </table>
+</div>

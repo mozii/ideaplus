@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ node['title'] }}{% end %}
+
+{% block right %}
+	    {% include "right/right_topic_help.html" %}
+{% end %}
+
+{% block content %}
+            <div class="box"> 
+                <div class="cell"> 
+			<div class="fr" align="right">
+			       返回 <a href="{{ reverse_url('node', node['name']) }}">{{ node['title'] }}</a>
+		       </div>
+		       <span class="bigger"><a href="{{ reverse_url('main') }}">{{ handler.settings.site_name }}</a> <span class="chevron">&nbsp;›&nbsp;</span> <a href="{{ reverse_url('node', node['name']) }}">{{ node['title'] }}</a> <span class="chevron">&nbsp;›&nbsp;</span> 创建新主题</span> 
+		</div>
+		<div class="cell"> 
+		    <form action="" method="post"> 
+			{% if globals().get('error_msgs') %}
+			<strong>请补充、修改您填写的内容</strong>
+			<div class="sep10"></div>
+			<ul>
+			    {% for error in error_msgs %}
+			    <li>{{ error }}</li>
+			    {% end %}
+			</ul>
+			{% end %}
+                    	<textarea name="title" maxlength="120" class="mll">{% if globals().get('title') %}{{ title }}{% end %}</textarea> 
+                    	<div class="sep10"></div> 
+                    	<textarea name="content" class="mll tall">{% if globals().get('content') %}{{ content }}{% end %}</textarea> 
+                    	<div class="sep10"></div> 
+                    	<input type="submit" value="创建" class="super normal button" /> 
+			{{ xsrf_form_html() }}
+                    </form> 
+                </div> 
+                <!-- <div class="inner"> 
+                    <span class="fade"><span class="chevron">‹&nbsp;</span>返回 <a href="#">#</a></span> 
+                </div> -->
+				
+            </div>
+{% end %}

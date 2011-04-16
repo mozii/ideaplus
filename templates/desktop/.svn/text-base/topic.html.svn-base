@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}{{ topic['title'] }}{% end %}
+
+{% block right %}
+
+{% end %}
+
+{% block js %}
+	<script src="{{ static_url('js/textarea.js') }}" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.clickable').click(function(){
+				var reply_content = document.getElementById('reply_content');
+				user = $(this).attr('alt');
+				TA.add(reply_content, ' @'+user+' ')
+				return;
+			});
+		});
+		
+	</script>
+{% end %}
+
+{% block content %}
+	<div class="box">
+		<div class="cell" style="min-height: 73px;"> 
+			<div class="fr snow" style="padding-left: 10px; padding-bottom: 10px;">
+				<a href="{{ reverse_url('member', topic['member_name']) }}"><img src="{{ modules.Avatar(topic['member_email'], 48, 'jpg') }}" /></a>
+				<a href="#" name="_top"></a>
+			</div> 
+			<span class="bigger">
+				<a href="{{ reverse_url('main') }}">{{ handler.settings.site_name }}</a>
+				<span class="chevron"> › </span> 
+				<a href="{{ reverse_url('node', topic['node_name']) }}">{{ topic['node_title'] }}</a>
+			</span>
+			<h1>{{ topic['title'] }}</h1>
+			<small class="fade">
+				<a href="{{ reverse_url('member', topic['member_name']) }}" class="dark">{{ topic['member_name'] }}</a> 创建于 {{ modules.TimeSince(topic['created']) }}, 
+				{{ topic.get('view_num', 0) }} 次点击
+			</small> 
+		</div> 
+		<div class="inner">
+			<div class="content topic_content">
+				{{ modules.Gist(modules.Mention(modules.Escape(escape(topic['content'])))) }}
+			</div>
+		</div>
+		{% if current_user %}
+		<div class="inner">
+			<div class="fr" align="right">
+				<span class="snow">({{ int(like_count) }}人收藏)</span> 
+				<form id="like_form" method="POST" action="{{ reverse_url('topic_like', topic['num']) }}">
+					{{ xsrf_form_html() }}
+					<a href="javascript:like_it()" id="like_op" class="op">{% if has_fav %}取消收藏{% else %}收藏{% end %}</a>
+				</form>
+				{% if current_user['account'] == topic['member_name'] %}
+				<a href="#" class="op">编辑</a>
+				{% end %}
+			</div>
+			&nbsp;
+		</div>
+		{% end %}
+	</div>
+	<div class="sep20"></div>
+	{% if topic.has_key('replies_num') %}
+	<div class="box">
+		<div class="cell">
+			<div class="fr">
+				{% if sort=='asc' %}
+				<a href="{{ reverse_url('topic', int(topic['num'])) }}?page={{ page.page }}&s=des">按时间先后排列</a> &nbsp;
+				{% elif sort=='des' %}
+				<a href="{{ reverse_url('topic', int(topic['num'])) }}?page={{ page.page }}&s=asc">新回复在前</a> &nbsp;
+				{% end %}
+				<span class="snow">|</span>&nbsp;
+				<a href="{{ reverse_url('topic', int(topic['num'])) }}?page={{ page.page }}&user={{ topic['member_name'] }}">只看楼主</a>
+			</div>
+			<span class="fade">
+				{{ topic['replies_num'] }} 回复
+			</span>
+		</div>
+		<div id="replies">
+		{% for reply in replies %}
+		{{ modules.Reply(reply) }}
+		{% end %}
+		</div>
+		<div class="inner" align="center">
+                        {{ page.pager(handler.settings.pager) }}
+                </div>
+	</div>
+	{% else %}
+	<div class="glass" align="center">
+		<div class="inner">
+			<span>目前没有回复</span>
+		</div>
+	</div>
+	{% end %}
+	
+	{% if current_user %}
+	<div class="sep20"></div>
+	
+	<div class="box">
+		<form action="" method="post">
+			{% if globals().get('error_msgs') %}
+			<strong>请补充、修改您填写的内容</strong>
+			<div class="sep10"></div>
+			<ul>
+			    {% for error in error_msgs %}
+			    <li>{{ error }}</li>
+			    {% end %}
+			</ul>
+			{% end %}
+			<div class="cell">
+				<div class="fr fade">
+					<a href="#_top" class="dark">回到顶部</a>
+				</div> 
+				<span class="fade">添加一条回复</span>
+			</div> 
+			<div class="cell"> 
+				<textarea class="mll" name="content" id="reply_content"></textarea> 
+				<div class="sep10"></div> 
+				<div class="fr fade" id="e"></div> 
+				<input type="submit" class="super normal button" value="发送" />
+				{{ xsrf_form_html() }}
+			</div>
+		</form>
+
+               <div class="inner"><span class="fade" style="line-height: 200%;">请尽量避免无要点，无信息量的回复，如“沙发”和“顶”，节约自己和他人的宝贵时间是一种美德。<div class="sep10"></div>与其与人争吵，不如将其屏蔽。</span></div> 
+           </div>
+	{% end %}
+{% end %}

@@ -1,0 +1,23 @@
+{% extends "../base.html" %}
+{% block title %}需要邀请码{% end %}
+
+
+{% block right %}
+{% end %}
+
+{% block content %}
+        <div class="box">
+            <div class="cell">
+                <span class="fade">
+                    <a href="{{ reverse_url('main') }}">{{ handler.settings.site_name }}</a> <span class="chevron">&nbsp;›&nbsp;</span> 不能访问这个板块
+                </span>
+            </div> 
+                <div class="inner">
+                    <div style="text-align:center;">
+                        <p>注册需要邀请码,如果没有邀请码...就不能注册...</p>
+                        <img src="{{ static_url('img/403.jpg') }}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% end %}

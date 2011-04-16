@@ -1,0 +1,19 @@
+<div class="cell reply">
+    <a name="r_{{ str(comment['_id']) }}"></a>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%"> 
+        <tr> 
+            <td width="48" valign="top"><a href="{{ reverse_url('member', comment['member_name']) }}">
+                <img src="{{ modules.Avatar( comment['member_email'], 48, 'jpg') }}" />
+            </a></td> 
+            <td width="10"></td> 
+            <td width="auto" valign="top"> 
+                <div class="fr"> 
+                    <strong><small class="snow">最后更新于 {{ modules.TimeSince(comment['updated']) }} <img src={{ static_url("img/reply.png")}} align="absmiddle" border="0" alt="{{ comment['member_name'] }}" class="clickable" /><span class="ops"></span></small></strong> 
+                </div> 
+                <div class="sep3"></div> 
+                <strong><a href="{{ reverse_url('member', comment['member_name']) }}" class="dark">{{ comment['member_name'] }}</a></strong> 
+                <div class="sep5"></div> 
+                <div class="content reply_content">{{ modules.Mention(modules.Escape(escape(comment['comment']))) }}</div> 
+            </td> 
+    </table>
+</div>
